@@ -7,9 +7,27 @@ services:
     hostname: ${GITLAB_HOST}
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://${GITLAB_HOST}'
+        external_url 'https://${GITLAB_HOST}'
+        nginx['redirect_http_to_https'] = true
+        nginx['ssl_certificate'] = "${GITLAB_SSL_CERT_PATH}"
+        nginx['ssl_certificate_key'] = "${GITLAB_SSL_KEY_PATH}"
         gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_SSH_PORT}
         gitlab_rails['initial_root_password'] = '${GITLAB_ROOT_PASSWORD}'
+
+        # LDAP Integration
+        gitlab_rails['ldap_enabled'] = ${LDAP_ENABLED}
+        gitlab_rails['ldap_servers'] = YAML.load <<-EOS
+          main:
+            label: 'LDAP'
+            host: '${LDAP_HOST}'
+            port: ${LDAP_PORT}
+            uid: '${LDAP_UID}'
+            bind_dn: '${LDAP_BIND_DN}'
+            password: '${LDAP_BIND_PASSWORD}'
+            base: '${LDAP_BASE}'
+            active_directory: false
+            allow_username_or_email_login: true
+        EOS
     ports:
       - "${GITLAB_HTTP_PORT}:80"
       - "${GITLAB_HTTPS_PORT}:443"
