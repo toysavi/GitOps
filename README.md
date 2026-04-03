@@ -93,7 +93,7 @@ Please update LDAP configuration with your Active Directory info
 - Place your SSL certs in /etc/gitlab/ssl/ on the host.
 - Start GitLab EE:
     ```
-    docker-compose up -d /gitlab/deployment/gitlab
+    docker compose up -d /gitlab/deployment/gitlab
     ```
 - Access GitLab securely at: https://gitlab.example.com
 
@@ -169,7 +169,7 @@ Please update LDAP configuration with your Active Directory info and HTTPS certi
 
 - Start Nexus Registry:
 ```
-docker-compose up -d /nexus/deployment/nexus
+docker compose up -d /nexus/deployment/nexus
 ```
 - Access Nexus securely at: https://nexus.example.com
 
