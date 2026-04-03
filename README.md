@@ -173,3 +173,9 @@ docker compose up -d /nexus/deployment/nexus
 ```
 - Access Nexus securely at: https://nexus.example.com
 
+## 📌 Phase 3: ArgoCD + Monitoring (GitOps + Observability)
+
+This phase deploys ArgoCD for GitOps‑based Kubernetes deployments and a monitoring stack (Prometheus, Grafana, Alertmanager) for observability.
+All data is persisted on NFS, and HTTPS is enabled for secure access.
+
+### 
