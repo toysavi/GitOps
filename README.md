@@ -57,7 +57,7 @@ sh get-docker.sh
     ```
     Please change nfs-server to your nfs server ip/name.
 
-- Add entries to /etc/fstab for persistence.
+- Add entries to `/etc/fstab` for persistence.
 
 #### 5. Clone GitLab Deployment from Github:
 
@@ -128,4 +128,48 @@ sh get-docker.sh
     sudo yum update -y
     sudo yum install git -y
     ```
-    
+- Prepare NFS Mount
+    ```
+    mkdir -p /nexus/data    
+    sudo mount -t nfs nfs-server:/export/nexus/data /nexus/data
+    ```
+    Add to `/etc/fstab` for persistence.
+
+#### 3. Clone Nexus Deployment from Github
+- Clone Nexus deployment
+    ```
+    git clone https://github.com/toysavi/GitOps.git /nexus/deployment
+    chmod 755 -R /nexus/deployment
+    cd /nexus/deployment
+    ```
+#### 4. Variable update
+Please update LDAP configuration with your Active Directory info and HTTPS certificate paths.
+- Nexus config
+    -NEXUS_HOST=nexus.example.com
+    - NEXUS_ADMIN_USER=admin
+    - NEXUS_ADMIN_PASSWORD=SuperSecret456
+
+    `Please change FQDN name and Nexus admin password.`
+
+- Update SSL Certificate
+    - NEXUS_SSL_CERT_PATH=/nexus/deployment/ssl/nexus.crt
+    - NEXUS_SSL_KEY_PATH=/nexus/deployment/ssl/nexus.key
+
+    Please copy your private key certificate to `/nexus/deployment/ssl` and rename to your certificate file name.
+
+- LDAP config
+    - LDAP_HOST=ldap.example.com
+    - LDAP_BIND_DN=cn=admin,dc=example,dc=com
+    - LDAP_BIND_PASSWORD=SuperSecretLDAP
+    - LDAP_BASE=dc=example,dc=com
+
+    `Please update to your LDAP Config.`
+
+#### 5. Setup
+
+- Start Nexus Registry:
+```
+docker-compose up -d /nexus/deployment/nexus
+```
+- Access Nexus securely at: https://nexus.example.com
+
