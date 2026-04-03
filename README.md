@@ -89,7 +89,7 @@ Please update LDAP configuration with your Active Directory info
     - LDAP_BASE=dc=example,dc=com
     
     `Please update to your LDAP Config.`
-#### 7. Setup Notes
+#### 7. Startup GitLab EE
 - Place your SSL certs in /etc/gitlab/ssl/ on the host.
 - Start GitLab EE:
     ```
@@ -165,7 +165,7 @@ Please update LDAP configuration with your Active Directory info and HTTPS certi
 
     `Please update to your LDAP Config.`
 
-#### 5. Setup
+#### 5. Startup Nexus
 
 - Start Nexus Registry:
 ```
