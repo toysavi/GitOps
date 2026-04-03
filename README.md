@@ -68,15 +68,27 @@ chmod 755 -R /gitlab/deployment
 cd /gitlab/deployment
 ```
 
-#### 6. LDAP Config
+#### 6. Variable update
 
 Please update LDAP configuration with your Active Directory info
 
-- LDAP_HOST=ldap.example.com
-- LDAP_BIND_DN=cn=admin,dc=example,dc=com
-- LDAP_BIND_PASSWORD=SuperSecretLDAP
-- LDAP_BASE=dc=example,dc=com
+- Gitlab config
+    - GITLAB_HOST=gitlab.example.com
+    - GITLAB_ROOT_PASSWORD=SuperSecret123
 
+    `Please change FQDN name and Gitlab root password.`
+- Update SSL Certificate
+    - GITLAB_SSL_CERT_PATH=/gitlab/deployment/ssl/gitlab.crt
+    - GITLAB_SSL_KEY_PATH=/gitlab/deployment/ssl/gitlab.key
+    
+    `Please copy your private key certificate to /gitlab/deployment/ssl and rename to your certificate file name.`
+- LDAP config
+    - LDAP_HOST=ldap.example.com
+    - LDAP_BIND_DN=cn=admin,dc=example,dc=com
+    - LDAP_BIND_PASSWORD=SuperSecretLDAP
+    - LDAP_BASE=dc=example,dc=com
+    
+    `Please update to your LDAP Config.`
 #### 7. Setup Notes
 - Place your SSL certs in /etc/gitlab/ssl/ on the host.
 - Start GitLab EE:
@@ -84,3 +96,36 @@ Please update LDAP configuration with your Active Directory info
     docker-compose up -d /gitlab/deployment/gitlab
     ```
 - Access GitLab securely at: https://gitlab.example.com
+
+
+## 📌 Phase 2: Nexus Registry (Artifact Storage)
+
+This phase deploys Sonatype Nexus Repository Manager 3 as the artifact storage for your GitOps pipeline.
+It receives Docker images from GitLab EE and serves them to ArgoCD for deployments.
+All data is persisted on NFS, mounted directly to /nexus/data, and secured with HTTPS + LDAP.
+
+### 🔧 Prerequisites
+#### 1. Install Docker
+```
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+```
+#### 2. Install Docker Compose and Requirements
+- Install docker compose
+    ```
+    sudo curl -L "https://github.com/docker/compose/releases/download/2.24.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    docker-compose --version
+    ```
+- Install git
+    - For Ubuntu/Debien
+    ```
+    sudo apt update -y
+    sudo apt install git -y
+    ```
+    - For Oracl Linux/Red Hat
+    ```
+    sudo yum update -y
+    sudo yum install git -y
+    ```
+    
